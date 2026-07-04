@@ -65,9 +65,13 @@ if not os.path.exists(uploads_dir):
 
 fastapi_app.mount("/uploads", StaticFiles(directory=uploads_dir), name="uploads")
 
-@fastapi_app.get("/")
+@fastapi_app.api_route("/", methods=["GET", "HEAD"])
 def read_root():
     return {"status": "ok", "message": "Chime server is running"}
+
+@fastapi_app.api_route("/health", methods=["GET", "HEAD"])
+def health_check():
+    return {"status": "ok"}
 
 # Wrap FastAPI inside Socket.IO ASGI app
 # IMPORTANT: uvicorn must serve THIS `app` object — not `fastapi_app`
